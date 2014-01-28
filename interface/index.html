@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sinatra JSON API Example</title>
+  <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Load THINGS data immediately
+      $.ajax({
+        url: '/blog_post',
+        method: 'GET'
+      }).done(function (data) {
+        data.forEach(function (d) {
+          $('#blog-index').append("<p><strong>" + d.title + d.author + "</strong>: " + d.description + "</p>");
+        });
+      });
+
+      // Form to create a new Thing
+      $('#new-submit').click(function () {
+        var data = {};
+
+        // Get the data from the form elements
+        data.title  = $('#new-title').val();
+        data.author = $('#new-author').val()
+        data.description = $('#new-content').val();
+
+        $.ajax({
+          url: '/blog_post',
+          method: 'POST',
+          data: data
+        }).done(function (response) {
+          console.log(response);
+        });
+
+        // Prevent the form from being submitted.
+        return false;
+      });
+    });
+  </script>
+</head>
+<body>
+  <div id="blog-index">
+    <h2>All The Things</h2>
+  </div>
+
+
+  <h2>New Blog Post</h2>
+  <form id="new-blog">
+    <p><strong>Title:</strong></p>
+    <input id="new-title" name="title" type="text">
+
+    <p><strong>Author:</strong></p>
+    <input id="new-author" name="author" type="text">
+
+    <p><strong>Content:</strong></p>
+    <textarea id="new-content" name="content"></textarea>
+
+    <p><input id="new-submit" type="submit"></p>
+  </form>
+
+</body>
+</html>
